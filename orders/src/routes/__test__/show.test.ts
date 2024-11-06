@@ -1,10 +1,12 @@
 import request from "supertest";
 import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
+import { generateMongooseMockID } from "../../test/utils";
 
 it("fetches the order", async () => {
   // Create a ticket
   const ticket = Ticket.build({
+    id: generateMongooseMockID(),
     title: "FFF",
     price: 90000,
   });
@@ -31,6 +33,7 @@ it("fetches the order", async () => {
 it("returns an error if malicious user tries to get the order of another user", async () => {
   // Create a ticket
   const ticket = Ticket.build({
+    id: generateMongooseMockID(),
     title: "FFF",
     price: 90000,
   });

@@ -3,11 +3,12 @@ import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 import { Order, OrderStatus } from "../../models/order";
 import { natsWrapper } from "../../nats-wrapper";
+import { generateMongooseMockID } from "../../test/utils";
 
 it("returns an error if malicious user tries to cancel the order of another user", async () => {
   // Create a ticket
   const ticket = Ticket.build({
-    id: "abcd",
+    id: generateMongooseMockID(),
     title: "FFF",
     price: 90000,
   });
@@ -33,7 +34,7 @@ it("returns an error if malicious user tries to cancel the order of another user
 it("successfully marks an order as cancelled", async () => {
   //  create a ticket with Ticket Model
   const ticket = Ticket.build({
-    id: "abcd",
+    id: generateMongooseMockID(),
     title: "FFF",
     price: 50000,
   });
@@ -64,7 +65,7 @@ it("successfully marks an order as cancelled", async () => {
 it("emits an order cancelled event when successful", async () => {
   //  create a ticket with Ticket Model
   const ticket = Ticket.build({
-    id: "abcd",
+    id: generateMongooseMockID(),
     title: "FFF",
     price: 50000,
   });

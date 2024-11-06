@@ -1,5 +1,6 @@
 import { OrderStatus } from "@abracodeabra-tickets/common";
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { TicketDoc } from "./ticket";
 
 export { OrderStatus };
@@ -18,6 +19,7 @@ interface OrderDoc extends mongoose.Document {
   status: OrderStatus;
   expiresAt: Date;
   ticket: TicketDoc;
+  version: number;
 }
 
 // an interface that describes the properties that a Order model (collection) has
@@ -55,6 +57,16 @@ const orderSchema = new mongoose.Schema(
     },
   }
 );
+
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
+
+orderSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+  return Order.findOne({
+    _id: event.id,
+    version: event.version - 1,
+  });
+};
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);

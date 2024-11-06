@@ -55,10 +55,10 @@ router.post(
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt: expiration,
-      ticket
-    })
+      ticket,
+    });
 
-    await order.save()
+    await order.save();
 
     //@TODO: Publish an event saying that the order was created
     const client = natsWrapper.client;
@@ -66,15 +66,15 @@ router.post(
     new OrderCreatedPublisher(client).publish({
       id: order.id,
       status: order.status,
+      version: order.version,
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(),
       ticket: {
         id: ticket.id,
-        price: ticket.price
+        price: ticket.price,
       },
-      version: 0
-    })
-    
+    });
+
     res.status(201).send(order);
   }
 );

@@ -2,9 +2,11 @@ import request from "supertest";
 import { app } from "../../app";
 import { Order } from "../../models/order";
 import { Ticket } from "../../models/ticket";
+import { generateMongooseMockID } from "../../test/utils";
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
+    id: generateMongooseMockID(),
     title: "Fam Friends Festival",
     price: 100000,
   });
