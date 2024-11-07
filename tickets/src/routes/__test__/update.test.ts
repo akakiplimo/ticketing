@@ -2,6 +2,7 @@ import supertest from "supertest";
 import { app } from "../../app";
 import { generateMongooseMockID } from "../../test/utils";
 import { natsWrapper } from "../../nats-wrapper";
+import { Ticket } from "../../models/ticket";
 
 it("returns a 404 if the provided ticketId does not exist", async () => {
   const id = generateMongooseMockID();
@@ -138,3 +139,29 @@ it("publish an event", async () => {
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
+
+it("rejects updates if a ticket is reserved", async () => {
+  const cookie = global.signin();
+  const response = await supertest(app)
+    .post("/api/tickets")
+    .set("Cookie", cookie)
+    .send({
+      title: "abcs",
+      price: 10000,
+    });
+
+  const ticket = await Ticket.findById(response.body.id);
+
+  ticket!.set({ orderId: generateMongooseMockID() })
+
+  await ticket!.save()
+
+  await supertest(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set("Cookie", cookie)
+    .send({
+      title: "Coster Ojwang Live",
+      price: 20000,
+    })
+    .expect(400);
+})

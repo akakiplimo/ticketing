@@ -5,6 +5,7 @@ import {
   NotFoundError,
   requireAuth,
   UnauthorizedError,
+  BadRequestError,
 } from "@abracodeabra-tickets/common";
 import { Ticket } from "../models/ticket";
 import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher";
@@ -26,6 +27,11 @@ router.put(
     const ticket = await Ticket.findById(req.params.id);
 
     if (!ticket) throw new NotFoundError();
+
+    // If orderId exists on ticket, reject updates on reserved ticket
+    if (ticket.orderId) {
+      throw new BadRequestError("Cannot edit a reserved ticket");
+    }
 
     if (ticket.userId !== req.currentUser!.id) throw new UnauthorizedError();
 
