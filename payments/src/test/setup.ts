@@ -2,6 +2,17 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { generateMongooseMockID } from "./utils";
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file (or .env.local if present)
+dotenv.config();
+
+// Now you can safely access the STRIPE_TEST_KEY
+const stripeTestKey = process.env.STRIPE_TEST_KEY;
+
+if (!stripeTestKey) {
+  throw new Error("STRIPE_TEST_KEY is not defined in your .env file");
+}
 
 declare global {
   var signin: (id?: string) => string[];
@@ -9,7 +20,7 @@ declare global {
 
 jest.mock("../nats-wrapper");
 
-process.env.STRIPE_KEY = "sk_test_51QKHsgJX7MlKhU0FzJAbJK1Yn2CuH97l2dmzUBkAvYfFKod94So32Rg33ApnyLHsRtL5G8IyMKhrXpm6AoJISVY300WF2GDapd"
+process.env.STRIPE_KEY = stripeTestKey;
 
 let mongo: any;
 
