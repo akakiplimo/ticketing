@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Now you can safely access the STRIPE_TEST_KEY
-const stripeTestKey = process.env.STRIPE_TEST_KEY;
+const stripeTestKey = "sk_test_51QKHsgJX7MlKhU0FzJAbJK1Yn2CuH97l2dmzUBkAvYfFKod94So32Rg33ApnyLHsRtL5G8IyMKhrXpm6AoJISVY300WF2GDapd";
 
 if (!stripeTestKey) {
   throw new Error("STRIPE_TEST_KEY is not defined in your .env file");
