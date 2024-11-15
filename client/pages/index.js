@@ -17,7 +17,7 @@ const Landing = ({ currentUser, tickets }) => {
 
   return (
     <div>
-      <h2>Tickets List</h2>
+      <h2>Tickets</h2>
       <table className="table">
         <thead>
           <tr>
