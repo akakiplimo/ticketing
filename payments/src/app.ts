@@ -18,7 +18,7 @@ app.use(
     // & jwt is inherently secure as signature can be verified
     signed: false,
     // only allow https (secure connections)
-    secure: process.env.NODE_ENV !== "test",
+    secure: false,
   })
 );
 app.use(currentUser);
