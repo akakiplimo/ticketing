@@ -3,6 +3,7 @@ import { OrderCreatedListener } from "./events/listeners/order-created-listener"
 import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
+  console.log("Starting up.....")
   // check env variables on application startup
 
   if (!process.env.NATS_CLIENT_ID) {
